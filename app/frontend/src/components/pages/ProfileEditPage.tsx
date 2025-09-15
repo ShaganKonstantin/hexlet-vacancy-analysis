@@ -1,0 +1,231 @@
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+interface User {
+  name: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string,
+  subscriptions: {
+    isPro: 'free' | 'pro';
+    validTill: string;
+  },
+  notifications: {
+    newFilteredVacancies: boolean;
+    weeklyAnalytics: boolean;
+    newsAndUpdates: boolean;
+  }
+}
+
+type FormValues = {
+  name: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+}
+
+
+const testUser = {
+  name: 'Константин',
+  lastName: 'Шаган',
+  email: 'konstantinshagan@gmail.com',
+  phoneNumber: '+7 (123) 456-45-45',
+  subscriptions: {
+    isPro: true,
+    validTill: '08-08-2008',
+  },
+  notifications: {
+    newFilteredVacancies: true,
+    weeklyAnalytics: false,
+    newsAndUpdates: true,
+  }
+}
+
+const ProfileEditPage: React.FC = () => {
+  const [isProfileSubmitting, setIsProfileSubmitting] = useState(false);
+  const [isNotificationsSubmitting, setIsNotificationsSubmitting] = useState(false);
+
+  // https://https://react-hook-form.com/docs/useform
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      name: testUser.name,
+      lastName: testUser.lastName,
+      email: testUser.email,
+      phoneNumber: testUser.phoneNumber,
+    },
+  })
+
+  // Состояние для чекбоксов с уведомлениями
+  const [notifications, setNotifications] = useState({
+    newFilteredVacancies: testUser.notifications.newFilteredVacancies,
+    weeklyAnalytics: testUser.notifications.weeklyAnalytics,
+    newsAndUpdates: testUser.notifications.newsAndUpdates,
+    // Потом взять юзера с бэка вместо тестового
+  })
+
+  // Временный сабмит персональный данных
+  const onSubmitProfile = async ( data: FormValues) => {
+    setIsProfileSubmitting(true)
+    console.log('Changed creds:', data)
+
+    setTimeout(() => {
+      setIsProfileSubmitting(false);
+      console.log('Creds has been updated')
+    }, 1000)
+    // После интеграции с Инерцией подставить данные с бэка
+  }
+
+  // Временный сабмит уведомления для чекбоксов
+  const onSubmitNotifications = async () => {
+    setIsNotificationsSubmitting(true);
+    console.log(notifications)
+
+    setTimeout(() => {
+      setIsNotificationsSubmitting(false);
+      console.log('Notificateions successfully amended')
+    }, 1000)
+    // После интеграции с Инерцией подставить данные с бэка
+  }
+
+  // Хэндлер для изменения чекбоксов с уведомлениями
+  // Принимает ключ с типом, который берет тип значения из notifications
+  // Распаковывает объект спредом и заменяет значение ключа на противоположное 
+  const handleNotificationChange = (key: keyof typeof notifications) => {
+    setNotifications((prev) => ({
+      ...prev,
+      [key]: !prev[key]
+    }))
+  }
+
+  // Форматирование даты, чтобы получтить человеческий вид. Можно потом добавить таймзону, если надо
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric'
+    })
+  }
+
+  return (
+    <div className='bg-gray-100 max-w-4xl mx-auto p-6 mt-1 space-y-8'>
+      {/* Header */}
+      <header className='border-gray-200 pb-2'>
+        <h1 className='text-2xl font-bold text-gray-900'>Профиль пользователя</h1>
+      </header>
+
+      {/* Personal data */}
+      <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
+        <h2 className='text-xl font-bold mb-6 text-gray-900'>Персональные данные</h2>
+
+        <form onSubmit={handleSubmit(onSubmitProfile)} className='pb-6'>
+          <div className='flex flex-col gap-6'>
+            {/* Имя */}
+            <div>
+              <label htmlFor="name" className='block text-sm font-medium text-gray-700 mb-2'>Имя</label>
+              <input 
+                id="name" 
+                type="text" 
+                className={
+                  `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                   ${errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`
+                }
+                placeholder='Введите имя'
+                {...register('name', {
+                  required: 'Введите имя',
+                  minLength: {
+                    value: 2,
+                    message: 'Имя должно содержать минимум 2 буквы'
+                  },
+                })}
+                />
+                {errors.name && (
+                  <p className='mt-1 text-sm text-red-600'>{errors.name.message}</p>
+                )}
+            </div>
+            {/* Фамилия */}
+            <div>
+              <label htmlFor="lastName" className='block text-sm font-medium text-gray-700 mb-2'>Фамилия</label>
+              <input 
+                id="lastName" 
+                type="text" 
+                className={
+                  `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                   ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`
+                }
+                placeholder='Введите фамилию'
+                {...register('lastName', {
+                  required: 'Введите фамилию',
+                  minLength: {
+                    value: 2,
+                    message: 'Фамилия должна содержать минимум 2 буквы'
+                  },
+                })}
+                />
+                {errors.lastName && (
+                  <p className='mt-1 text-sm text-red-600'>{errors.lastName.message}</p>
+                )}
+            </div>
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
+              <input 
+                id="email" 
+                type="email" 
+                className={
+                  `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                   ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`
+                }
+                placeholder='Введите email'
+                {...register('email', {
+                  required: 'Введите email',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Некорректный email'
+                  },
+                })}
+                />
+                {errors.email && (
+                  <p className='mt-1 text-sm text-red-600'>{errors.email.message}</p>
+                )}
+            </div>
+            {/* Телефон */}
+            <div>
+              <label htmlFor="phoneNumber" className='block text-sm font-medium text-gray-700 mb-2'>Телефон</label>
+              <input 
+                id="phoneNumber" 
+                type="tel" 
+                className={
+                  `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                   ${errors.phoneNumber ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`
+                }
+                placeholder='Введите номер телефона'
+                {...register('phoneNumber', {
+                  required: 'Введите номер телефона',
+                  pattern: {
+                    value: /^\+?[0-9\s\-\(\)]{10,20}$/,
+                    message: 'Некорректный формат телефона'
+                  },
+                })}
+                />
+                {errors.phoneNumber && (
+                  <p className='mt-1 text-sm text-red-600'>{errors.phoneNumber.message}</p>
+                )}
+            </div>
+            {/* Кнопка отправки изменений */}         
+            <button
+              type='submit'
+              disabled={isProfileSubmitting}
+              className='w-fit bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:cursor-not-allowed font-bold'
+            >
+              {isProfileSubmitting ? 'Сохранение изменений...' : 'Сохранить изменения'}
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  )
+}
+
+export default ProfileEditPage
