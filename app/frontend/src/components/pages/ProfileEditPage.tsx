@@ -36,8 +36,8 @@ const testUser = {
   },
   notifications: {
     newFilteredVacancies: true,
-    weeklyAnalytics: true,
-    newsAndUpdates: false,
+    weeklyAnalytics: false,
+    newsAndUpdates: true,
   }
 }
 
@@ -80,7 +80,7 @@ const ProfileEditPage: React.FC = () => {
   // Временный сабмит уведомления для чекбоксов
   const onSubmitNotifications = async () => {
     setIsNotificationsSubmitting(true);
-    console.log(notifications)
+    console.log('amended')
 
     setTimeout(() => {
       setIsNotificationsSubmitting(false);
@@ -208,7 +208,8 @@ const ProfileEditPage: React.FC = () => {
             <button
               type='submit'
               disabled={isProfileSubmitting}
-              className='w-fit bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 hover:cursor-pointer transition-colors duration-200 disabled:cursor-not-allowed font-bold'
+              style={{ backgroundColor: '#20B0B4' }}
+              className='w-fit text-white px-6 py-2 rounded-md hover:cursor-pointer disabled:cursor-not-allowed font-bold'
             >
               {isProfileSubmitting ? 'Сохранение изменений...' : 'Сохранить изменения'}
             </button>
@@ -219,14 +220,14 @@ const ProfileEditPage: React.FC = () => {
       <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
         <h2 className='text-2xl font-bold mb-6 text-gray-900'>Подписка и уведомления</h2>
         {/* Текущий план */}
-        <div className='bg-teal-100 rounded-lg p-5 mb-6'>
+        <div className='rounded-lg p-5 mb-6' style={{ backgroundColor: '#ECF7F7' }}>
           <div className='flex justify-between items-start'>
             <div>
               <h3 className='text-lg font-medium text-gray-800 mb-1'>Текущий план</h3>
               <p className='text-sm font-semibold text-gray-600 mb-1'>Действует до {testUser.subscriptions.validTill}</p>
             </div>
           {testUser.subscriptions.isPro && (
-            <div className="inline-flex items-center px-4 py-0.5 bg-teal-500 rounded-full">
+            <div className="inline-flex items-center px-4 py-0.5 rounded-full" style={{ backgroundColor: '#20B0B4' }}>
               <span className="text-white font-semibold">Pro</span>
             </div>
           )}
@@ -235,33 +236,43 @@ const ProfileEditPage: React.FC = () => {
         {/* Почтовые уведомления */}
         <div>
           <h3 className='text-lg font-medium text-gray-800 mb-3'>Почтовые уведомления</h3>
-          
-          <div className='space-y-3'>
-            <label className='flex items-center space-x-3 cursor-pointer'>
-              <input 
-                type="checkbox"
-                checked={testUser.notifications.newFilteredVacancies}
-                onChange={() => handleNotificationChange('newFilteredVacancies')}
-                />
-                <span className='font-semibold text-gray-800'>Новые вакансии по фильтрам</span>
-            </label>
-            <label className='flex items-center space-x-3 cursor-pointer'>
-              <input 
-                type="checkbox"
-                checked={testUser.notifications.weeklyAnalytics}
-                onChange={() => handleNotificationChange('weeklyAnalytics')}
-                />
-                <span className='font-semibold text-gray-800'>Еженедельная аналитика</span>
-            </label>
-            <label className='flex items-center space-x-3 cursor-pointer'>
-              <input 
-                type="checkbox"
-                checked={testUser.notifications.newsAndUpdates}
-                onChange={() => handleNotificationChange('newsAndUpdates')}
-                />
-                <span className='font-semibold text-gray-800'>Новости и обновления</span>
-            </label>
-          </div>
+            <form onSubmit={onSubmitNotifications}>
+              <div className='space-y-3'>
+                <label className='flex items-center space-x-3 cursor-pointer'>
+                  <input 
+                    type="checkbox"
+                    checked={testUser.notifications.newFilteredVacancies}
+                    onChange={() => handleNotificationChange('newFilteredVacancies')}
+                    />
+                    <span className='font-semibold text-gray-800'>Новые вакансии по фильтрам</span>
+                </label>
+                <label className='flex items-center space-x-3 cursor-pointer'>
+                  <input 
+                    type="checkbox"
+                    checked={testUser.notifications.weeklyAnalytics}
+                    onChange={() => handleNotificationChange('weeklyAnalytics')}
+                    />
+                    <span className='font-semibold text-gray-800'>Еженедельная аналитика</span>
+                </label>
+                <label className='flex items-center space-x-3 cursor-pointer mb-4'>
+                  <input 
+                    type="checkbox"
+                    checked={testUser.notifications.newsAndUpdates}
+                    onChange={() => handleNotificationChange('newsAndUpdates')}
+                    />
+                    <span className='font-semibold text-gray-800'>Новости и обновления</span>
+                </label>
+              </div>
+              {/* Кнопка отправки изменений */}         
+              <button
+                type='submit'
+                disabled={isNotificationsSubmitting}
+                style={{ backgroundColor: '#20B0B4' }}
+                className='w-fit text-white px-6 py-2 rounded-md hover:cursor-pointer disabled:cursor-not-allowed font-bold'
+              >
+                {isNotificationsSubmitting ? 'Сохранение изменений...' : 'Сохранить изменения'}
+              </button>
+            </form>
         </div>
       </section>
     </div>
