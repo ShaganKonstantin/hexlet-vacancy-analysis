@@ -7,7 +7,7 @@ interface User {
   email: string;
   phoneNumber: string,
   subscriptions: {
-    isPro: 'free' | 'pro';
+    isPro: boolean;
     validTill: string;
   },
   notifications: {
@@ -32,12 +32,12 @@ const testUser = {
   phoneNumber: '+7 (123) 456-45-45',
   subscriptions: {
     isPro: true,
-    validTill: '08-08-2008',
+    validTill: '01.06.2008',
   },
   notifications: {
     newFilteredVacancies: true,
-    weeklyAnalytics: false,
-    newsAndUpdates: true,
+    weeklyAnalytics: true,
+    newsAndUpdates: false,
   }
 }
 
@@ -99,15 +99,6 @@ const ProfileEditPage: React.FC = () => {
     }))
   }
 
-  // Форматирование даты, чтобы получтить человеческий вид. Можно потом добавить таймзону, если надо
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
-    })
-  }
-
   return (
     <div className='bg-gray-100 max-w-4xl mx-auto p-6 mt-1 space-y-8'>
       {/* Header */}
@@ -117,13 +108,13 @@ const ProfileEditPage: React.FC = () => {
 
       {/* Personal data */}
       <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
-        <h2 className='text-xl font-bold mb-6 text-gray-900'>Персональные данные</h2>
+        <h2 className='text-2xl font-bold mb-6 text-gray-900'>Персональные данные</h2>
 
-        <form onSubmit={handleSubmit(onSubmitProfile)} className='pb-6'>
+        <form onSubmit={handleSubmit(onSubmitProfile)}>
           <div className='flex flex-col gap-6'>
             {/* Имя */}
             <div>
-              <label htmlFor="name" className='block text-sm font-medium text-gray-700 mb-2'>Имя</label>
+              <label htmlFor="name" className='block text-sm font-medium text-gray-700 mb-1'>Имя</label>
               <input 
                 id="name" 
                 type="text" 
@@ -146,7 +137,7 @@ const ProfileEditPage: React.FC = () => {
             </div>
             {/* Фамилия */}
             <div>
-              <label htmlFor="lastName" className='block text-sm font-medium text-gray-700 mb-2'>Фамилия</label>
+              <label htmlFor="lastName" className='block text-sm font-medium text-gray-700 mb-1'>Фамилия</label>
               <input 
                 id="lastName" 
                 type="text" 
@@ -169,7 +160,7 @@ const ProfileEditPage: React.FC = () => {
             </div>
             {/* Email */}
             <div>
-              <label htmlFor="email" className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
+              <label htmlFor="email" className='block text-sm font-medium text-gray-700 mb-1'>Email</label>
               <input 
                 id="email" 
                 type="email" 
@@ -192,7 +183,7 @@ const ProfileEditPage: React.FC = () => {
             </div>
             {/* Телефон */}
             <div>
-              <label htmlFor="phoneNumber" className='block text-sm font-medium text-gray-700 mb-2'>Телефон</label>
+              <label htmlFor="phoneNumber" className='block text-sm font-medium text-gray-700 mb-1'>Телефон</label>
               <input 
                 id="phoneNumber" 
                 type="tel" 
@@ -217,12 +208,61 @@ const ProfileEditPage: React.FC = () => {
             <button
               type='submit'
               disabled={isProfileSubmitting}
-              className='w-fit bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:cursor-not-allowed font-bold'
+              className='w-fit bg-teal-500 text-white px-6 py-2 rounded-md hover:bg-teal-600 hover:cursor-pointer transition-colors duration-200 disabled:cursor-not-allowed font-bold'
             >
               {isProfileSubmitting ? 'Сохранение изменений...' : 'Сохранить изменения'}
             </button>
           </div>
         </form>
+      </section>
+      {/* Подписка и уведомления */}
+      <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
+        <h2 className='text-2xl font-bold mb-6 text-gray-900'>Подписка и уведомления</h2>
+        {/* Текущий план */}
+        <div className='bg-teal-100 rounded-lg p-5 mb-6'>
+          <div className='flex justify-between items-start'>
+            <div>
+              <h3 className='text-lg font-medium text-gray-800 mb-1'>Текущий план</h3>
+              <p className='text-sm font-semibold text-gray-600 mb-1'>Действует до {testUser.subscriptions.validTill}</p>
+            </div>
+          {testUser.subscriptions.isPro && (
+            <div className="inline-flex items-center px-4 py-0.5 bg-teal-500 rounded-full">
+              <span className="text-white font-semibold">Pro</span>
+            </div>
+          )}
+          </div>
+        </div>
+        {/* Почтовые уведомления */}
+        <div>
+          <h3 className='text-lg font-medium text-gray-800 mb-3'>Почтовые уведомления</h3>
+          
+          <div className='space-y-3'>
+            <label className='flex items-center space-x-3 cursor-pointer'>
+              <input 
+                type="checkbox"
+                checked={testUser.notifications.newFilteredVacancies}
+                onChange={() => handleNotificationChange('newFilteredVacancies')}
+                />
+                <span className='font-semibold text-gray-800'>Новые вакансии по фильтрам</span>
+            </label>
+            <label className='flex items-center space-x-3 cursor-pointer'>
+              <input 
+                type="checkbox"
+                checked={testUser.notifications.weeklyAnalytics}
+                onChange={() => handleNotificationChange('weeklyAnalytics')}
+                />
+                <span className='font-semibold text-gray-800'>Еженедельная аналитика</span>
+            </label>
+            <label className='flex items-center space-x-3 cursor-pointer'>
+              <input 
+                type="checkbox"
+                checked={testUser.notifications.newsAndUpdates}
+                onChange={() => handleNotificationChange('newsAndUpdates')}
+                />
+                <span className='font-semibold text-gray-800'>Новости и обновления</span>
+            </label>
+          </div>
+        </div>
       </section>
     </div>
   )
