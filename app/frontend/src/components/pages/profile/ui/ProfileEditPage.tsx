@@ -1,35 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-interface User {
-  name: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string,
-  subscriptions: {
-    isPro: boolean;
-    validTill: string;
-  },
-  notifications: {
-    newFilteredVacancies: boolean;
-    weeklyAnalytics: boolean;
-    newsAndUpdates: boolean;
-  }
-}
-
-type FormValues = {
-  name: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-}
-
+import type { FormValues } from '../model/types'
 
 const testUser = {
   name: 'Константин',
   lastName: 'Шаган',
   email: 'konstantinshagan@gmail.com',
-  phoneNumber: '+7 (123) 456-45-45',
+  // phoneNumber: '+7 (123) 456-45-45',
   subscriptions: {
     isPro: true,
     validTill: '01.06.2008',
@@ -41,7 +18,7 @@ const testUser = {
   }
 }
 
-const ProfileEditPage: React.FC = () => {
+export const ProfileEditPage: React.FC = () => {
   const [isProfileSubmitting, setIsProfileSubmitting] = useState(false);
   const [isNotificationsSubmitting, setIsNotificationsSubmitting] = useState(false);
 
@@ -53,7 +30,7 @@ const ProfileEditPage: React.FC = () => {
       name: testUser.name,
       lastName: testUser.lastName,
       email: testUser.email,
-      phoneNumber: testUser.phoneNumber,
+      // phoneNumber: testUser.phoneNumber,
     },
   })
 
@@ -187,22 +164,27 @@ const ProfileEditPage: React.FC = () => {
               <input 
                 id="phoneNumber" 
                 type="tel" 
-                className={
-                  `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
-                   ${errors.phoneNumber ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`
-                }
+
+                // РАСКОММЕНТИРОВАТЬ, КОГДА НА БЭКЕ ПОЯВИТСЯ СООТВЕТСТВУЮЩЕЕ ПОЛЕ 
+
+                // className={
+                //   `bg-gray-100 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                //    {${errors.phoneNumber ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}}`
+                // }
+                className='bg-gray-100 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 '
                 placeholder='Введите номер телефона'
-                {...register('phoneNumber', {
-                  required: 'Введите номер телефона',
-                  pattern: {
-                    value: /^\+?[0-9\s\-\(\)]{10,20}$/,
-                    message: 'Некорректный формат телефона'
-                  },
-                })}
+                // {...register('phoneNumber', {
+                //   required: 'Введите номер телефона',
+                //   pattern: {
+                //     value: /^\+?[0-9\s\-\(\)]{10,20}$/,
+                //     message: 'Некорректный формат телефона'
+                //   },
+                // })}
                 />
-                {errors.phoneNumber && (
+                {/* {errors.phoneNumber && (
                   <p className='mt-1 text-sm text-red-600'>{errors.phoneNumber.message}</p>
-                )}
+                )} */}
+
             </div>
             {/* Кнопка отправки изменений */}         
             <button
@@ -277,5 +259,3 @@ const ProfileEditPage: React.FC = () => {
     </div>
   )
 }
-
-export default ProfileEditPage

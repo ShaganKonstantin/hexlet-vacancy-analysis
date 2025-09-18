@@ -11,7 +11,7 @@ import GdprPage from '../components/pages/GdprPage';
 import PrivacyPolicyPage from '../components/pages/PrivacyPolicyPage';
 import LoginPage from '../components/pages/LoginPage';
 import RegisterPage from '../components/pages/RegisterPage';
-import ProfileEditPage from '../components/pages/ProfileEditPage';
+import { ProfileEditPage } from '../components/pages/profile/index';
 
 const routes = [
   { path: '/', element: <HomePage /> },
