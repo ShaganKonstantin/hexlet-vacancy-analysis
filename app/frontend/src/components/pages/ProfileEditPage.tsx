@@ -208,8 +208,7 @@ const ProfileEditPage: React.FC = () => {
             <button
               type='submit'
               disabled={isProfileSubmitting}
-              style={{ backgroundColor: '#20B0B4' }}
-              className='w-fit text-white px-6 py-2 rounded-md hover:cursor-pointer disabled:cursor-not-allowed font-bold'
+              className='w-fit text-white px-6 py-2 rounded-md hover:cursor-pointer disabled:cursor-not-allowed font-bold bg-[#20B0B4]'
             >
               {isProfileSubmitting ? 'Сохранение изменений...' : 'Сохранить изменения'}
             </button>
@@ -220,14 +219,14 @@ const ProfileEditPage: React.FC = () => {
       <section className='bg-white rounded-lg shadow-sm border border-gray-200 p-6'>
         <h2 className='text-2xl font-bold mb-6 text-gray-900'>Подписка и уведомления</h2>
         {/* Текущий план */}
-        <div className='rounded-lg p-5 mb-6' style={{ backgroundColor: '#ECF7F7' }}>
+        <div className='rounded-lg p-5 mb-6 bg-[#ECF7F7]'>
           <div className='flex justify-between items-start'>
             <div>
               <h3 className='text-lg font-medium text-gray-800 mb-1'>Текущий план</h3>
               <p className='text-sm font-semibold text-gray-600 mb-1'>Действует до {testUser.subscriptions.validTill}</p>
             </div>
           {testUser.subscriptions.isPro && (
-            <div className="inline-flex items-center px-4 py-0.5 rounded-full" style={{ backgroundColor: '#20B0B4' }}>
+            <div className='inline-flex items-center px-4 py-0.5 rounded-full bg-[#20B0B4]'>
               <span className="text-white font-semibold">Pro</span>
             </div>
           )}
