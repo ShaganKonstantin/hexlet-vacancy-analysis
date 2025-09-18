@@ -1,22 +1,12 @@
 import React from "react";
-import { formatSalary } from "../utils/FormatSalary";
+import { formatSalary } from "../../../utils/FormatSalary";
 import { Link } from '@inertiajs/react';
-
-interface VacancyProps {
-  title: string;
-  description: string;
-  company: string;
-  salary: string;
-  city: string;
-  id: number;
-  key_skills: string[];
-}
+import { truncateText } from "../../../utils/TruncateText";
+import type { VacancyProps } from "../model/types"
 
 export const VacancyCard: React.FC<VacancyProps> = (props) => {
   const { title, description, company, salary, city, id, key_skills } = props;
   
-  const truncatedDescription = (description: string) => description.length > 50 ? `${description.substring(0, 50)}...` : description;
-
   return (
     <Link href={`/vacancies/${id}`}>
         <div className="w-300 mx-auto border border-gray-200 rounded-lg shadow-sm p-6 m-4">
@@ -29,7 +19,7 @@ export const VacancyCard: React.FC<VacancyProps> = (props) => {
       <div className="flex justify-between items-start mb-4">
         <div>
           <p className="text-xl text-[#69717d] mb-3">Зарплата:</p>
-          <p className="text-xl text-[#69717d]">{truncatedDescription(description)}</p>
+          <p className="text-xl text-[#69717d]">{truncateText(description, 50)}</p>
         </div>
         <div className="inline-flex items-center px-4 py-0.5 rounded-full bg-[#20B0B4]">
           <span className="text-white font-semibold">{formatSalary(salary)}</span>
