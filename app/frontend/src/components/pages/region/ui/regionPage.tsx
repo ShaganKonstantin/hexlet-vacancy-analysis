@@ -3,7 +3,7 @@ import { VacancyCard } from "../../../vacancy/index";
 import type { RegionPageProps } from "../model/types";
 
 export const RegionPage: React.FC<RegionPageProps> = ({ region, vacancies, dynamics, filters, filterOptions,links, query_params }) => {
-  const [searchTerm, useSearchTerm] = useState(filters.search_query || '');
+  const [searchTerm, setSearchTerm] = useState(filters.search_query || '');
   const [selectedExp, setSelectedExp] = useState(filters.experience || null);
   const [selectedRegion, setSelectedRegion] = useState(filters.region || '');
 
@@ -15,9 +15,12 @@ export const RegionPage: React.FC<RegionPageProps> = ({ region, vacancies, dynam
         currentCount: 0
       };
     }
-
+    // Данные за текущий месяц
     const currentData = dynamics[dynamics.length - 1];
+
+    // Данные за начало срока
     const startData = dynamics[0];
+
     const calculateGrowth = ((currentData.count - startData.count) / startData.count) * 100;
     // Оругляем результат, чтобы было 1 значение после запятой и нормально читалось.
     const roundedGrowth = calculateGrowth.toFixed(1);
@@ -29,6 +32,26 @@ export const RegionPage: React.FC<RegionPageProps> = ({ region, vacancies, dynam
         year: item.year
       }
     });
+
+    const handleFilter = (e: React.FormEvent) => {
+      e.preventDefault();
+
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('seach', searchTerm);
+      if (selectedExp !== null) params.set('experience', selectedExp.toString());
+      if (selectedRegion) params.set('region', selectedRegion);
+      
+      // Inertia.get(route('region.vacancies', {region: region:id}), params) РАСКОММЕНТИТЬ, КОГДА ПОДЪЕДЕТ ИНТЕГРАЦИЯ С ИНЕРЦИЕЙ
+    }
+
+    const handleExp = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
+      setSelectedExp(value ? parseInt(value) : null);
+    }
+
+    const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedRegion(e.target.value);
+    }
 
     return {
       growthPercentage: roundedGrowth,

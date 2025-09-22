@@ -41,7 +41,7 @@ export interface RegionPageProps {
   dynamics: MonthlyDynamisc[];
   filters: {
     experience?: number;
-    region?: number;
+    region?: string;
     search_query: string;
   };
   filterOptions: {
