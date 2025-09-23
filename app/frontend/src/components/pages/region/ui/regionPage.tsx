@@ -69,9 +69,32 @@ export const RegionPage: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {paginatedVacancies.length === 0 &&
-      <p>Вакансии не найдены</p>}
+    <div className="container bg-[#f9f9f9] mx-auto p-6">
+      {/* Карточки с аналитикой по специальностям */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {
+        paginatedVacancies.length === 0 &&
+        <p>Вакансии не найдены</p>
+        }
+        {paginatedVacancies.map((vacancy) => {
+          const growth = calculateGrowth(vacancy.dynamics);
+          return (
+            <div key={vacancy.id} className="border border-gray-200 rounded shadow p-4">
+              <h2 className="text-sm font-semibold text-[#0c2e4d] mb-1">{vacancy.title}</h2>
+              <div className="flex justify-between items-start">
+                <p className="text-2xl font-bold text-[#0c2e4d] mb-2">
+                  {vacancy.dynamics.reduce((acc, cur) => acc + cur.count, 0)}
+                </p>
+                <div className="inline-flex items-center px-2 rounded-full bg-[#20B0B4]">
+                  <div className="text-white text-sm">{growth >= 0 ? '+' : '-'}{growth}%</div>
+                </div>
+              </div>
+              <hr className="w-full h-1 border border-solid rounded-full border-[#20B0B4] bg-[#20B0B4]" />
+            </div>
+          )
+        })}
+      </div>
     </div>
+    
   )
 }
