@@ -13,14 +13,14 @@ const experienceRange: Record<string, [number, number]> = {
 }
 
 export const RegionPage: React.FC = () => {
-  const region: RegionPageProps['region'] = 'Санкт-Петербург';
+  // const region: RegionPageProps['region'] = 'Санкт-Петербург';
   
   const [selectedExperience, setSelectedExperience] = useState<RegionPageProps['filters']['experience']>('');
   const [selectedRegion, setSelectedRegion] = useState<RegionPageProps['filters']['region']>('');
   const [searchQuery, setSearchQuery] = useState<RegionPageProps['filters']['query']>('');
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 3;
+  const pageSize = 4;
 
   const filteredVacancies = useMemo(() => {
     return test_vacancies.filter((vacancy) => {
@@ -56,6 +56,8 @@ export const RegionPage: React.FC = () => {
 
   const paginatedVacancies = filteredVacancies.slice((safeCurrentPage - 1) * pageSize, safeCurrentPage * pageSize);
 
+  const region = selectedRegion || (paginatedVacancies.length > 0 ? paginatedVacancies[0].city : 'Регион');
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= lastPage) setCurrentPage(newPage);
   }
@@ -70,8 +72,13 @@ export const RegionPage: React.FC = () => {
 
   return (
     <div className="container bg-[#f9f9f9] mx-auto p-6">
+      {/* Название региона */}
+      <div className="w-fit border border-gray-200 rounded shadow text-2xl font-bold text-[#0c2e4d] p-3 mb-4">
+        {region}
+      </div>
+      {/* Конец названия региона */}
       {/* Карточки с аналитикой по специальностям */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {
         paginatedVacancies.length === 0 &&
         <p>Вакансии не найдены</p>
@@ -79,7 +86,7 @@ export const RegionPage: React.FC = () => {
         {paginatedVacancies.map((vacancy) => {
           const growth = calculateGrowth(vacancy.dynamics);
           return (
-            <div key={vacancy.id} className="border border-gray-200 rounded shadow p-4">
+            <div key={vacancy.id} className="border bg-white border-gray-200 rounded shadow p-4">
               <h2 className="text-sm font-semibold text-[#0c2e4d] mb-1">{vacancy.title}</h2>
               <div className="flex justify-between items-start">
                 <p className="text-2xl font-bold text-[#0c2e4d] mb-2">
@@ -94,6 +101,88 @@ export const RegionPage: React.FC = () => {
           )
         })}
       </div>
+      {/* Конец карточек с аналитикой по специальностям */}
+      {/* Фильтры */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border border-gray-200 rounded shadow p-4">
+        {/* Селекты */}
+        <div className="flex flex-col gap-4 md:flex-row md:gap-4">
+          {/* Опыт */}
+          <div className="relative inline-block w-full">
+            <select
+              value={selectedExperience}
+              onChange={(e) => {
+                setSelectedExperience(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="text-[#2f4664] border border-gray-200 rounded p-2 md:w-30 w-full appearance-none pr-6"
+            >
+              <option value="">Опыт</option>
+              {experience_options.map((exp) => (
+                <option key={exp} value={exp}>{exp === '5+' ? `${exp} лет` : `${exp} года`}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2">
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L5 5L9 1" stroke="#afb8c3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          {/* Регион */}
+          <div className="relative inline-block w-full">
+            <select 
+              value={selectedRegion}
+              onChange={(e) => {
+                setSelectedRegion(e.target.value);
+                setCurrentPage(1);
+              }} 
+              className="appearance-none text-[#2f4664] border border-gray-200 rounded p-2 md:w-42 w-full" 
+            >
+              <option value="">Регион</option>
+              {country_regions.map((region) => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+              <div className="pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2">
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L5 5L9 1" stroke="#afb8c3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+          </div>
+
+        </div>
+        {/* Конец селектов */}
+        {/* Поиск по словам */}
+        <div className="flex flex-wrap w-full md:w-auto gap-4">
+          <input 
+            type="text" 
+            placeholder="Поиск по ключевым словам..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1)
+            }}
+            className="border border-gray-200 rounded p-2 flex-grow w-full md:w-60 text-xs"
+            style={{ fontSize: '14px' }}
+          />
+          <button className="flex items-center justify-center text-white px-4 py-1 rounded-md cursor-pointer bg-[#20B0B4] w-full md:w-auto hover:bg-[#1a8f90]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
+              />
+            </svg>
+            Найти</button>
+        </div>
+      </div>
+      {/* Конец фильтров */}
     </div>
     
   )
