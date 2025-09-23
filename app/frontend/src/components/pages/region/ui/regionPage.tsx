@@ -5,7 +5,6 @@ import type { VacancyWithExperience, RegionPageProps, VacancyWithDynamics } from
 import { test_vacancies } from '../testData'
 
 const experience_options: RegionPageProps['experienceOptions'] = ['0-1', '2-4', '5+'];
-const country_regions: RegionPageProps['countryRegions'] = ['Санкт-Петербург', 'Москва', 'Новороссийск'];
 const experienceRange: Record<string, [number, number]> = {
   '0-1': [0, 1],
   '2-4': [2, 4],
@@ -13,8 +12,10 @@ const experienceRange: Record<string, [number, number]> = {
 }
 
 export const RegionPage: React.FC = () => {
-  // const region: RegionPageProps['region'] = 'Санкт-Петербург';
-  
+  const country_regions: RegionPageProps['countryRegions'] = useMemo(() => {
+    return Array.from(new Set(test_vacancies.map((vacancy) => vacancy.city)))
+  }, [test_vacancies]);
+
   const [selectedExperience, setSelectedExperience] = useState<RegionPageProps['filters']['experience']>('');
   const [selectedRegion, setSelectedRegion] = useState<RegionPageProps['filters']['region']>('');
   const [searchQuery, setSearchQuery] = useState<RegionPageProps['filters']['query']>('');
@@ -148,7 +149,6 @@ export const RegionPage: React.FC = () => {
                 </svg>
               </div>
           </div>
-
         </div>
         {/* Конец селектов */}
         {/* Поиск по словам */}
@@ -184,6 +184,5 @@ export const RegionPage: React.FC = () => {
       </div>
       {/* Конец фильтров */}
     </div>
-    
   )
 }
