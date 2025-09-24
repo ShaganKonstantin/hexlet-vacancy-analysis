@@ -183,6 +183,9 @@ export const RegionPage: React.FC = () => {
         </div>
       </div>
       {/* Конец фильтров */}
+      {paginatedVacancies.map((vacancy) => (
+        <VacancyCard key={vacancy.id} {...vacancy} />
+      ))}
     </div>
   )
 }
