@@ -28,7 +28,7 @@ export const VacancyCard: React.FC<VacancyProps> = (props) => {
       {/* Ключевые навыки */}
       <div className="flex flex-wrap gap-3">
         {key_skills.map((skill) => (
-          <div className="inline-flex w-fit items-center px-4 py-0.5 border border-gray-200 rounded-full">
+          <div key={skill} className="inline-flex w-fit items-center px-4 py-0.5 border border-gray-200 rounded-full">
             <span className="font-bold text-[#0d2e4e]">{skill}</span>
           </div>
         ))}
