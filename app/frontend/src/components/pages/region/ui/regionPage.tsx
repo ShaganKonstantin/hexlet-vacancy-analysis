@@ -3,6 +3,7 @@ import { VacancyCard } from "../../../vacancy";
 import type { VacancyProps } from "../../../vacancy/model/types";
 import type { VacancyWithExperience, RegionPageProps, VacancyWithDynamics } from "../model/types";
 import { test_vacancies } from '../testData'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const experience_options: RegionPageProps['experienceOptions'] = ['0-1', '2-4', '5+'];
 const experienceRange: Record<string, [number, number]> = {
@@ -10,6 +11,8 @@ const experienceRange: Record<string, [number, number]> = {
   '2-4': [2, 4],
   '5+': [5, Infinity],
 }
+
+const monthOrder = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 
 export const RegionPage: React.FC = () => {
   const country_regions: RegionPageProps['countryRegions'] = useMemo(() => {
@@ -71,6 +74,24 @@ export const RegionPage: React.FC = () => {
     return Math.round(((currentValue - startValue) / startValue) * 100)
   }
 
+  const dynamicsByMonth = useMemo(() => {
+    const monthCounts: Record<string, number> = {};
+
+    monthOrder.forEach((month) => {
+      monthCounts[month] = 0;
+    })
+
+    for (const vacancy of test_vacancies) {
+      for (const dynamics of vacancy.dynamics) {
+        monthCounts[dynamics.month] = (monthCounts[dynamics.month] || 0) + dynamics.count;
+      }
+    }
+
+    const data = monthOrder.map((month) => ({ month, count: monthCounts[month] })).filter((item) => item.count > 0);
+
+    return data;
+  }, [test_vacancies]);
+
   return (
     <div className="container bg-[#f9f9f9] mx-auto p-6">
       {/* Название региона */}
@@ -103,6 +124,29 @@ export const RegionPage: React.FC = () => {
         })}
       </div>
       {/* Конец карточек с аналитикой по специальностям */}
+      {/* Диаграмма с вакансиями */}
+      <div className="w-full h-64 mb-6 bg-white border border-gray-200 rounded shadow p-4">
+        <h2 className="text-xl font-bold text-[#0c2e4d] mb-4">Динамика вакансий</h2>
+        <ResponsiveContainer height='100%' width='100%'>
+          <AreaChart
+            data={dynamicsByMonth}
+            margin={{ top: 10, right: 30, left: 0, bottom: 0}}    
+          >
+            <defs>
+              <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#20B0B4" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#20B0B4" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey='month' />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Area type="monotone" dataKey="count" stroke="#20B0B4" fillOpacity={1} fill="url(#colorCount)" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      {/* Конец диграммы с вакансиями */}
       {/* Фильтры */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border border-gray-200 rounded shadow p-4">
         {/* Селекты */}

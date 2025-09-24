@@ -1,6 +1,6 @@
 import React from "react";
 import { formatSalary } from "../../../utils/FormatSalary";
-import { Link } from '@inertiajs/react';
+// import { Link } from '@inertiajs/react';
 import { truncateText } from "../../../utils/TruncateText";
 import type { VacancyProps } from "../model/types";
 
@@ -8,7 +8,7 @@ export const VacancyCard: React.FC<VacancyProps> = (props) => {
   const { title, description, company, salary, city, id, key_skills } = props;
   
   return (
-    <Link href={`/vacancies/${id}`}>
+    // <Link href={`/vacancies/${id}`}>
         <div className="mx-auto border border-gray-200 rounded-lg shadow-sm p-6 m-4">
       {/* Информация о должности и город */}
       <div className="mb-6">
@@ -34,6 +34,6 @@ export const VacancyCard: React.FC<VacancyProps> = (props) => {
         ))}
       </div>
     </div>
-    </Link>
+    // </Link>
   )
 }
