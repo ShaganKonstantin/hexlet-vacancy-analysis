@@ -1,16 +1,4 @@
-import type { VacancyProps } from "../../../vacancy/model/types";
-
-export interface VacancyWithDynamics extends VacancyProps {
-  dynamics: {
-    count: number;
-    month: string;
-    year: number;
-  }[];
-}
-
-export interface VacancyWithExperience extends VacancyWithDynamics {
-  minExperience: number;
-}
+import type { VacancyWithExperience } from "../../../vacancy/model/types";
 
 export interface RegionPageProps {
   region: string;

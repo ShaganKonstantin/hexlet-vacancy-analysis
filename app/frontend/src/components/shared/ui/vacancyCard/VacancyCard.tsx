@@ -1,8 +1,8 @@
 import React from "react";
-import { formatSalary } from "../../../utils/FormatSalary";
+import { formatSalary } from "../../utils/FormatSalary";
 // import { Link } from '@inertiajs/react';
-import { truncateText } from "../../../utils/TruncateText";
-import type { VacancyProps } from "../model/types";
+import { truncateText } from "../../utils/TruncateText";
+import type { VacancyProps } from "../../../vacancy/model/types";
 
 export const VacancyCard: React.FC<VacancyProps> = (props) => {
   const { title, description, company, salary, city, id, key_skills } = props;
