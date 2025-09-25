@@ -14,7 +14,7 @@ export interface VacancyWithExperience extends VacancyWithDynamics {
 
 export interface RegionPageProps {
   region: string;
-  vacancies: VacancyWithDynamics[];
+  vacancies: VacancyWithExperience[];
   experienceOptions: string[];
   countryRegions: string[];
   filters: {
