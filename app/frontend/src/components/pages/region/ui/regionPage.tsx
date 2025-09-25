@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { VacancyCard } from "../../../vacancy";
-import type { VacancyProps } from "../../../vacancy/model/types";
-import type { VacancyWithExperience, RegionPageProps, VacancyWithDynamics } from "../model/types";
+import type { VacancyWithExperience, RegionPageProps } from "../model/types";
 import { test_vacancies } from '../testData'
 import { AreaChart, Area, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -24,7 +23,7 @@ export const RegionPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<RegionPageProps['filters']['query']>('');
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 4;
+  const pageSize = 6;
 
   const filteredVacancies = useMemo(() => {
     return test_vacancies.filter((vacancy) => {
@@ -67,7 +66,7 @@ export const RegionPage: React.FC = () => {
     if (newPage >= 1 && newPage <= lastPage) setCurrentPage(newPage);
   }
 
-  const calculateGrowth = (dynamics: VacancyWithDynamics['dynamics']): number => {
+  const calculateGrowth = (dynamics: VacancyWithExperience['dynamics']): number => {
     if (dynamics.length < 2) return 0;
     const startValue = dynamics[0].count;
     const currentValue = dynamics[dynamics.length - 1].count;
