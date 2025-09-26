@@ -8,9 +8,9 @@ const experienceRange: Record<string, [number, number]> = {
 }
 
 export function useVacancyFilters(vacancies: VacancyWithExperience[]) {
-  const [selectedExperience, setSelectedExperience] = useState<RegionPageProps['filters']['experience']>('');
-  const [selectedRegion, setSelectedRegion] = useState<RegionPageProps['filters']['region']>('');
-  const [searchQuery, setSearchQuery] = useState<RegionPageProps['filters']['query']>('');
+  const [selectedExperience, setSelectedExperience] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredVacancies = useMemo(() => {
       return vacancies.filter((vacancy) => {

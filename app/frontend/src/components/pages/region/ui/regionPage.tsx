@@ -1,33 +1,42 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VacancyCard } from "../../../shared/ui/vacancyCard";
-import type { RegionPageProps } from "../model/types";
+import { VacancyDynamicsChart } from "../../../vacancy/dynamics/ui/VacancyDynamicsChart";
 import type { VacancyWithExperience } from "../../../vacancy/model/types";
 import { test_vacancies } from '../testData'
-import { AreaChart, Area, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useVacancyFilters } from "../../../vacancy/filters/model/useVacancyFilters";
+import { useVacancyDynamics } from "../../../vacancy/dynamics/model/useVacancyDynamics";
+import { VacancyFilters } from "../../../vacancy/filters/ui/VacancyFilters";
 
-const experience_options: RegionPageProps['experienceOptions'] = ['0-1', '2-4', '5+'];
+
+const experience_options = ['0-1', '2-4', '5+'];
 
 export const RegionPage: React.FC = () => {
-  const country_regions: RegionPageProps['countryRegions'] = useMemo(() => {
-    return Array.from(new Set(test_vacancies.map((vacancy) => vacancy.city)))
-  }, [test_vacancies]);
+  const {
+    selectedExperience,
+    selectedRegion,
+    searchQuery, 
+    filteredVacancies, 
+    setFilters
+  } = useVacancyFilters(test_vacancies)
 
-
+  const dynamicsData = useVacancyDynamics(filteredVacancies);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 6;
-
   const lastPage = Math.ceil(filteredVacancies.length / pageSize);
   const safeCurrentPage = Math.min(currentPage, lastPage || 1); // Страхуемся, что номер текущей страницы не больше, чем максимально возможное число страниц
-
   const paginatedVacancies = filteredVacancies.slice((safeCurrentPage - 1) * pageSize, safeCurrentPage * pageSize);
 
   const region = selectedRegion || (paginatedVacancies.length > 0 ? paginatedVacancies[0].city : 'Регион');
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedExperience, selectedRegion, searchQuery])
+
   // Если приспичит сделать кнопки для переключения страниц
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= lastPage) setCurrentPage(newPage);
-  }
+  // const handlePageChange = (newPage: number) => {
+  //   if (newPage >= 1 && newPage <= lastPage) setCurrentPage(newPage);
+  // }
 
   const calculateGrowth = (dynamics: VacancyWithExperience['dynamics']): number => {
     if (dynamics.length < 2) return 0;
@@ -69,32 +78,18 @@ export const RegionPage: React.FC = () => {
         })}
       </div>
       {/* Конец карточек с аналитикой по специальностям */}
-      {/* Диаграмма с вакансиями */}
-      <div className="w-full h-64 mb-6 bg-white border border-gray-200 rounded shadow p-4">
-        <h2 className="text-xl font-bold text-[#0c2e4d] mb-4">Динамика вакансий</h2>
-        <div className="md:w-1/2 mx-auto h-full">
-          <ResponsiveContainer width='100%' height='100%'>
-            <AreaChart
-              data={dynamicsByMonth}
-              margin={{ top: 10, right: 15, left: 15, bottom: 25}}    
-            >
-              <defs>
-                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#20B0B4" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#20B0B4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey='month' interval={0} tick={{ fontSize: 12 }}/>
-              <CartesianGrid vertical={false} strokeDasharray="" />
-              <Tooltip />
-              <Area type="monotone" dataKey="count" stroke="#20B0B4" fillOpacity={1} fill="url(#chartGrad)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-      {/* Конец диграммы с вакансиями */}
+      {dynamicsData.length > 0 && (
+        <VacancyDynamicsChart data={dynamicsData} />
+      )}
       {/* Фильтры */}
-
+      <VacancyFilters
+      experience={selectedExperience}
+      region={selectedRegion}
+      searchQuery={searchQuery}
+      regionsOptions={Array.from(new Set(test_vacancies.map((v) => v.city)))}
+      experienceOptions={experience_options}
+      onChangeFilters={setFilters}
+      />
       {/* Конец фильтров */}
       {paginatedVacancies.map((vacancy) => (
         <VacancyCard key={vacancy.id} {...vacancy} />
