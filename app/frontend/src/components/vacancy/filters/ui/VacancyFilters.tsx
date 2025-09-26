@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronDown } from "lucide-react";
 
 interface VacancyFiltersProps {
   experience: string;
@@ -29,9 +30,7 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
           ))}
           </select>
           <div className="pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2">
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L5 5L9 1" stroke="#afb8c3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ChevronDown color="#afb8c3" size={18}/>
           </div>
         </div>
         {/* Регион */}
@@ -49,9 +48,7 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
           ))}
           </select>
           <div className="pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2">
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L5 5L9 1" stroke="#afb8c3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ChevronDown color="#afb8c3" size={18}/>
           </div>
         </div>
       </div>

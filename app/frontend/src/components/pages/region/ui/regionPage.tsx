@@ -6,6 +6,7 @@ import { test_vacancies } from '../testData'
 import { useVacancyFilters } from "../../../vacancy/filters/model/useVacancyFilters";
 import { useVacancyDynamics } from "../../../vacancy/dynamics/model/useVacancyDynamics";
 import { VacancyFilters } from "../../../vacancy/filters/ui/VacancyFilters";
+import { Building2 } from "lucide-react";
 
 
 const experience_options = ['0-1', '2-4', '5+'];
@@ -49,7 +50,8 @@ export const RegionPage: React.FC = () => {
   return (
     <div className="container bg-[#f9f9f9] mx-auto p-6">
       {/* Название региона */}
-      <div className="w-fit border border-gray-200 rounded shadow text-2xl font-bold text-[#0c2e4d] p-3 mb-4">
+      <div className="flex items-center w-fit border border-gray-200 rounded shadow text-2xl font-bold text-[#0c2e4d] p-3 mb-4">
+        <Building2 className="mr-2" color="#20B0B4"/>
         {region}
       </div>
       {/* Конец названия региона */}
