@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 interface VacancyFiltersProps {
   experience: string;
@@ -66,20 +66,7 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
           style={{ fontSize: '14px' }}
         />
         <button className="flex items-center justify-center text-white px-4 py-1 rounded-md cursor-pointer bg-[#20B0B4] w-full md:w-auto hover:bg-[#1a8f90]">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 mr-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
-          />
-          </svg>
+        <Search className="mr-3" size={18} />
           Найти</button>
       </div>
     </div>

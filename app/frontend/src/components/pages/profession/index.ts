@@ -1,0 +1,1 @@
+export { ProfessionPage } from './ui/professionPage'

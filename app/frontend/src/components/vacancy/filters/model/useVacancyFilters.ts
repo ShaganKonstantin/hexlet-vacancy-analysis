@@ -41,10 +41,10 @@ export function useVacancyFilters(vacancies: VacancyWithExperience[]) {
       })
     }, [vacancies, selectedExperience, selectedRegion, searchQuery]);
 
-  function setFilters(params: { experience?: string; region?: string; query?: string; }) {
+  function setFilters(params: { experience?: string; region?: string; searchQuery?: string; }) {
     if (params.experience !== undefined) setSelectedExperience(params.experience);
     if (params.region !== undefined) setSelectedRegion(params.region);
-    if (params.query !== undefined) setSearchQuery(params.query);
+    if (params.searchQuery !== undefined) setSearchQuery(params.searchQuery);
   }
 
   return {
