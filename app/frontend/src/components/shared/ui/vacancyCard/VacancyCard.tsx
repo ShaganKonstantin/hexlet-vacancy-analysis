@@ -1,39 +1,46 @@
 import React from "react";
+import { Card, Badge, Text, Group, Stack } from '@mantine/core';
 import { formatSalary } from "../../utils/FormatSalary";
-// import { Link } from '@inertiajs/react';
 import { truncateText } from "../../utils/TruncateText";
 import type { VacancyProps } from "../../../vacancy/model/types";
+// import { Link } from '@inertiajs/react';
 
 export const VacancyCard: React.FC<VacancyProps> = (props) => {
-  const { title, description, company, salary, city, id, key_skills } = props;
-  
+  const { title, description, company, salary, city, key_skills } = props;
+
   return (
     // <Link href={`/vacancies/${id}`}>
-        <div className="mx-auto border border-gray-200 rounded-lg shadow-sm p-6 m-4">
+      <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto" my="md">
       {/* Информация о должности и город */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#0d2e4e] mb-2">{title}</h1>
-        <p className="text-xl text-[#69717d]">{company} &bull; {city}</p>
-      </div>
-      {/* Зарплата и описание*/}   
-      <div className="mb-4">
-        <div className="flex justify-between items-start ">
-          <p className="text-xl text-[#69717d] mb-3">Зарплата:</p>
-          <div className="inline-flex items-center px-4 py-0.5 rounded-full bg-[#20B0B4]">
-            <span className="text-white font-semibold">{formatSalary(salary)}</span>
-          </div>
-        </div>
-        <p className="text-xl text-[#69717d]">{truncateText(description, 50)}</p>
-      </div>
+      <Stack mb="md" gap={3}>
+        <Text fw={700} size="xl" c="#0d2e4e">{title}</Text>
+        <Text size="md" c="#69717d">{company} &bull; {city}</Text>
+      </Stack>
+
+      {/* Зарплата и описание*/}
+      <Group justify="space-between" align="flex-start" mb="sm">
+        <Text size="md" c="#69717d" fw={500}>Зарплата:</Text>
+        <Badge size="lg" radius="xl" color="#20B0B4">
+          {formatSalary(salary)}
+        </Badge>
+      </Group>
+      <Text size="md" c="#69717d" mb="md">{truncateText(description, 50)}</Text>
+
       {/* Ключевые навыки */}
-      <div className="flex flex-wrap gap-3">
+      <Group gap="xs" wrap="wrap">
         {key_skills.map((skill) => (
-          <div key={skill} className="inline-flex w-fit items-center px-4 py-0.5 border border-gray-200 rounded-full">
-            <span className="font-bold text-[#0d2e4e]">{skill}</span>
-          </div>
+          <Badge key={skill} variant="outline" radius="xl" color="#0d2e4e" size="lg" 
+            styles={{ root: {
+              borderColor: '#E5E7EB', 
+              color: '#0d2e4e', 
+              },
+            }}
+            >
+            {skill}
+          </Badge>
         ))}
-      </div>
-    </div>
+      </Group>
+    </Card>
     // </Link>
-  )
-}
+  );
+};
