@@ -2,12 +2,14 @@ import React from "react";
 import { AreaChart, Area, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChartColumn } from "lucide-react";
 import { Card, Group, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface VacancyDynamicsChartProps {
   data: { month: string; count: number}[]
 }
 
 export const VacancyDynamicsChart: React.FC<VacancyDynamicsChartProps> = ({ data }) => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   return (
     <Card
       shadow="sm"
@@ -26,7 +28,7 @@ export const VacancyDynamicsChart: React.FC<VacancyDynamicsChartProps> = ({ data
         width: '100%', 
         margin: '0 auto',
         height: 200, 
-        maxWidth: '50%'
+        maxWidth: isMobile? '100%' : '50%'
       }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
