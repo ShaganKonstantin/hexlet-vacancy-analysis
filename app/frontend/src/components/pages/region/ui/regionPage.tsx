@@ -7,6 +7,7 @@ import { useVacancyFilters } from "../../../vacancy/filters/model/useVacancyFilt
 import { useVacancyDynamics } from "../../../vacancy/dynamics/model/useVacancyDynamics";
 import { VacancyFilters } from "../../../vacancy/filters/ui/VacancyFilters";
 import { Building2 } from "lucide-react";
+import { Container, Text, Card, Group, Grid, Divider, Badge, Stack } from "@mantine/core";
 
 
 const experience_options = ['0-1', '2-4', '5+'];
@@ -48,54 +49,63 @@ export const RegionPage: React.FC = () => {
   }
 
   return (
-    <div className="container bg-[#f9f9f9] mx-auto p-6">
+    <Container  bg='#f9f9f9' mx='auto' p='xl'>
       {/* Название региона */}
-      <div className="flex items-center w-fit border border-gray-200 rounded shadow text-2xl font-bold text-[#0c2e4d] p-3 mb-4">
-        <Building2 className="mr-2" color="#20B0B4"/>
-        {region}
-      </div>
+      <Card withBorder shadow="sm" radius='md' w='fit-content' p='md' mb='md'>
+        <Group>
+          <Building2 color="#20B0B4"/>
+          <Text fz='xl' fw='bold' c='#0c2e4d'>{region}</Text>
+        </Group>
+      </Card>
       {/* Конец названия региона */}
       {/* Карточки с аналитикой по специальностям */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {
-        paginatedVacancies.length === 0 &&
-        <p>Вакансии не найдены</p>
-        }
+      <Grid mb='md' gutter={{ base: 6, md: 12}}>
+        {paginatedVacancies.length === 0 && (
+          <Text mb='md' fz='xl' fw='bold' c='#0c2e4d' ta='center' p='md'>Вакансии не найдены</Text>
+        )}
         {paginatedVacancies.map((vacancy) => {
           const growth = calculateGrowth(vacancy.dynamics);
           return (
-            <div key={vacancy.id} className="border bg-white border-gray-200 rounded shadow p-4">
-              <h2 className="text-sm font-semibold text-[#0c2e4d] mb-1">{vacancy.title}</h2>
-              <div className="flex justify-between items-start">
-                <p className="text-2xl font-bold text-[#0c2e4d] mb-2">
-                  {vacancy.dynamics.reduce((acc, cur) => acc + cur.count, 0)}
-                </p>
-                <div className="inline-flex items-center px-2 rounded-full bg-[#20B0B4]">
-                  <div className="text-white text-sm">{growth >= 0 ? '+' : '-'}{growth}%</div>
-                </div>
-              </div>
-              <hr className="w-full h-1 border border-solid rounded-full border-[#20B0B4] bg-[#20B0B4]" />
-            </div>
+            <Grid.Col key={vacancy.id} span={{ base:12, md:6 }}>
+              <Card withBorder shadow="sm">
+                <Text mb='sm' fz='sm'>{vacancy.title}</Text>
+                <Group justify='space-between' mb='sm'>
+                  <Text fw='bold' style={{ fontSize: '28px'}}>
+                    {vacancy.dynamics.reduce((acc, cur) => acc + cur.count, 0)}
+                  </Text>
+                  <Badge variant="filled" color="#20B0B4">
+                    {growth >= 0 ? `+${growth}` : `-${growth}`}
+                  </Badge>
+                </Group>
+                <Divider color="#20B0B4" size='md' />
+              </Card>
+            </Grid.Col>
           )
         })}
-      </div>
+      </Grid>
       {/* Конец карточек с аналитикой по специальностям */}
+      {/* Динамика вакансий */}
       {dynamicsData.length > 0 && (
-        <VacancyDynamicsChart data={dynamicsData} />
+        <VacancyDynamicsChart data={dynamicsData}/>
       )}
+      {/* Конец динамики вакансий */}
       {/* Фильтры */}
       <VacancyFilters
-      experience={selectedExperience}
-      region={selectedRegion}
-      searchQuery={searchQuery}
-      regionsOptions={Array.from(new Set(test_vacancies.map((v) => v.city)))}
-      experienceOptions={experience_options}
-      onChangeFilters={setFilters}
+        experience={selectedExperience}
+        region={selectedRegion}
+        searchQuery={searchQuery}
+        regionsOptions={Array.from(new Set(test_vacancies.map((v) => v.city)))}
+        experienceOptions={experience_options}
+        onChangeFilters={setFilters}
       />
-      {/* Конец фильтров */}
-      {paginatedVacancies.map((vacancy) => (
-        <VacancyCard key={vacancy.id} {...vacancy} />
-      ))}
-    </div>
+      {/* Конец фильров */}
+      {/* Карточки с вакансиями */}
+      <Stack gap='md'>
+        {paginatedVacancies.map((vacancy) => (
+          <VacancyCard key={vacancy.id} {...vacancy}/>
+        ))}
+      </Stack>
+      {/* Конец карточек с вакансиями */}
+    </Container>
   )
 }

@@ -10,7 +10,7 @@ export const VacancyCard: React.FC<VacancyProps> = (props) => {
 
   return (
     // <Link href={`/vacancies/${id}`}>
-      <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto" my="md">
+      <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto" style={{ width: '100%'}}>
       {/* Информация о должности и город */}
       <Stack mb="md" gap={3}>
         <Text fw={700} size="xl" c="#0d2e4e">{title}</Text>

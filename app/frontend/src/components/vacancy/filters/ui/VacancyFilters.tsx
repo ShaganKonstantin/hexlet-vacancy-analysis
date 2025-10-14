@@ -1,7 +1,7 @@
-import React from "react";
-import { Group, Select, TextInput, Button } from "@mantine/core";
+import React, { useState } from "react";
+import { Group, Select, TextInput, Button, CloseButton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 interface VacancyFiltersProps {
   experience: string;
@@ -14,6 +14,23 @@ interface VacancyFiltersProps {
 
 export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, region, searchQuery, regionsOptions, experienceOptions, onChangeFilters }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const [tempSearchQuery, setTempSearchQuery] = useState(searchQuery);
+
+  const handleSearch = () => {
+    onChangeFilters({ searchQuery: tempSearchQuery })
+  }
+
+  const handleKeyDown = (e:React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  const handleClearSearch = () => {
+    setTempSearchQuery('');
+    onChangeFilters({ searchQuery: '' });
+  }
+
   return (
     <Group
       mb='xl'
@@ -31,8 +48,9 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
             label: exp === '5+' ? `${exp} лет` : `${exp} года`
           }))}
           onChange={(value) => onChangeFilters({experience: value || ''})}
-          rightSection={<ChevronDown />}
           style={{ minWidth: '200px', flexGrow: isMobile? 1 : 0 }}
+          checkIconPosition="right"
+          clearable
         />
         <Select
           value={region}
@@ -42,8 +60,9 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
             label: region
           }))}
           onChange={(value) => onChangeFilters({region: value || ''})}
-          rightSection={<ChevronDown />}
           style={{ minWidth: '200px', flexGrow: isMobile? 1 : 0 }}
+          checkIconPosition="right"
+          clearable
         />
       </Group>
       {/* Конец селектов */}   
@@ -58,15 +77,25 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ experience, regi
         justify="flex-end"
       >
         <TextInput 
-          value={searchQuery}
+          value={tempSearchQuery}
           placeholder="Поиск по словам..."
-          onChange={(e) => onChangeFilters({ searchQuery: e.target.value })}
+          onChange={(e) => setTempSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
           style={{ width: isMobile ? '100%' : 'auto' }}
+          rightSection={
+            tempSearchQuery ? (
+              <CloseButton 
+                onClick={handleClearSearch}
+                size='sm'
+              />
+            ) : null
+          }
         />
         <Button
           leftSection={<Search />}
           color="#20B0B4"
           style={{ width: isMobile ? '100%' : 'auto', flexShrink: 0 }}
+          onClick={handleSearch}
         >
           Найти
         </Button>
