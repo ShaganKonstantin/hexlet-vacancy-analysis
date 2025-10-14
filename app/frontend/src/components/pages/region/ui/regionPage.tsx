@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { VacancyCard } from "../../../shared/ui/vacancyCard";
 import { VacancyDynamicsChart } from "../../../vacancy/dynamics/ui/VacancyDynamicsChart";
 import type { VacancyWithExperience } from "../../../vacancy/model/types";
-import { test_vacancies } from '../testData'
+import { test_vacancies } from '../../../shared/testData'
 import { useVacancyFilters } from "../../../vacancy/filters/model/useVacancyFilters";
 import { useVacancyDynamics } from "../../../vacancy/dynamics/model/useVacancyDynamics";
 import { VacancyFilters } from "../../../vacancy/filters/ui/VacancyFilters";

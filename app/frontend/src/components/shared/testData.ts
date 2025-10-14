@@ -1,4 +1,4 @@
-import type { VacancyWithExperience } from "../../vacancy/model/types";
+import type { VacancyWithExperience } from "../vacancy/model/types";
 
 export const test_vacancies: VacancyWithExperience[] = [
   {
