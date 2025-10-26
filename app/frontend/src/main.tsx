@@ -38,11 +38,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     InertiaProgress.init({ color: '#4B5563' });
 
-    createInertiaApp({
-        resolve: (name) => import(`./components/pages/${name}.tsx`),
-        setup: ({ el, App, props }) => {
-            const root = createRoot(el);
-            root.render(React.createElement(App, props));
-        },
-    });
+    // createInertiaApp({
+    //     resolve: (name) => import(`./components/pages/region/ui/${name}.tsx`),
+    //     setup: ({ el, App, props }) => {
+    //         const root = createRoot(el);
+    //         root.render(React.createElement(App, props));
+    //     },
+    // });
+createInertiaApp({
+    resolve: (name) => {
+        const pages = import.meta.glob('./components/pages/**/*.tsx', { eager: true });
+        
+        if (pages[`./components/pages/region/ui/RegionPage.tsx`]) {
+            return pages[`./components/pages/region/ui/RegionPage.tsx`];
+        }
+        
+        return pages[`./components/pages/${name}.tsx`];
+    },
+    setup: ({ el, App, props }) => {
+        const root = createRoot(el);
+        root.render(React.createElement(App, props));
+    },
+});
 });

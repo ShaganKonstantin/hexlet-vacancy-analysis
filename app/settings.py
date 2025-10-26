@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "app.services.telegram.telegram_channels",
     "app.services.superjob.superjob_parser",
     'app.services.regions',
+    'app.services.parser',
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -90,14 +91,18 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.{}".format(
-            os.getenv("DATABASE_ENGINE", "sqlite3")
-        ),
-        "NAME": os.getenv("DATABASE_NAME", "postgres"),
-        "USER": os.getenv("DATABASE_USER", "postgres"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD", "password"),
-        "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
+        "ENGINE": "django.db.backends.postgresql",
+        # 'ENGINE': 'django.db.backends.{}'.format(
+        #     os.getenv('DATABASE_ENGINE', 'sqlite3')
+        # ),
+        "NAME": os.getenv("DATABASE_NAME", "kshagandb"),
+        "USER": os.getenv("DATABASE_USER", "kshagan"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD", "vsmJUjPVHQ123"),
+        "HOST": os.getenv("DATABASE_HOST", "localhost"),
         "PORT": os.getenv("DATABASE_PORT", "5432"),
+        "OPTIONS": {
+            "options": "-c search_path=public"
+        }
     }
 }
 

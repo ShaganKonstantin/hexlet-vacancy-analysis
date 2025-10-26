@@ -1,1 +1,1 @@
-// export { RegionPage } from './ui/regionPage'
+export { RegionPage } from '../regionPage'
