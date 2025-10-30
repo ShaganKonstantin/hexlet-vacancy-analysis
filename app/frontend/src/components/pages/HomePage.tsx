@@ -19,15 +19,7 @@ const HomePage: React.FC = () => {
       <Card>
         {props.vacancies.map((vacancy) => (
           <Card key={vacancy.id}>
-              <VacancyCard 
-              id={vacancy.id}
-              title={vacancy.title}
-              salary={vacancy.salary}
-              company={vacancy.company}
-              city={vacancy.city}
-              employment={vacancy.employment}
-              skills={vacancy.skills}
-              url={vacancy.url}
+              <VacancyCard props={vacancy}
             />
           </Card>
         ))}
