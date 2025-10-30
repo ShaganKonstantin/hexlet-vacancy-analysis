@@ -24,40 +24,51 @@ export const VacancyCard: React.FC<VacancyCardPropsWrapper> = ({ props }) => {
 
             {/* Информация о компании */}
             <Group gap='xs'>
-              {company && (
+              {company ? 
                 <Group gap={5}>
                   <Building2 size={16} />
                   <Text size="md">{company.name}</Text>
-                </Group>
-              )}
-              {city && (
+                </Group> :
+                <Text fw={700} size="md" c="#0d2e4e">Название компании не указано</Text>
+              }
+              {city ? 
                 <Group gap={5}>
                   <MapPin size={16} />
                   <Text>{city.name}</Text>
-                </Group>
-              )}
+                </Group> :
+                <Text fw={700} size="md" c="#0d2e4e">Город не указан</Text>
+              }
               <Badge color="#20B0B4">{employment}</Badge>
             </Group>
 
             {/* Навыки */}
-            <Group wrap="wrap" gap="xs">
-              {skills.map((skill) => (
-                <Badge 
-                  key={skill} 
-                  color="#20B0B4"
-                  variant="outline"
-                  style={{ width: 'auto' }}
-                >
-                  {skill}
-                </Badge>
-              ))}
-            </Group>
+        <Group wrap="wrap" gap="xs">
+          {skills && skills.length > 0 ? (
+            skills.map((skill) => (
+              <Badge 
+                key={skill} 
+                color="#20B0B4"
+                variant="outline"
+                size="md"
+                style={{ width: 'auto' }}
+              >
+                {skill}
+              </Badge>
+            ))
+          ) : (
+            <Text fw={700} size="md" c="#0d2e4e">Необходимые навыки не указаны</Text>
+          )}
+        </Group>
           </Stack>
         </Box>
 
         {/* Правая часть */}
+        
         <Stack gap="md" align="flex-end">
-          <Text size="xl" fw={700} c='#20B0B4'>{salary}</Text>
+          {salary ?
+          <Text size="xl" fw={700} c='#20B0B4'>{salary}</Text> :
+          <Text size="xl" fw={700} c='#0d2e4e'>Зарплата не указана</Text>
+          }
           <Button 
             w='fit-content' 
             color="#20B0B4" 
@@ -76,39 +87,48 @@ export const VacancyCard: React.FC<VacancyCardPropsWrapper> = ({ props }) => {
 
         {/* Компания и город */}
         <Group gap='xs'>
-          {company && (
-            <Group gap={5}>
-              <Building2 size={16} />
+          {company ? 
+          <Group gap={5}>
+            <Building2 size={16} />
               <Text size="md">{company.name}</Text>
-            </Group>
-          )}
-          {city && (
-            <Group gap={5}>
-              <MapPin size={16} />
-              <Text>{city.name}</Text>
-            </Group>
-          )}
+          </Group> :
+          <Text fw={700} size="md" c="#0d2e4e">Название компании не указано</Text>
+          }
+          {city ? 
+          <Group gap={5}>
+            <MapPin size={16} />
+            <Text>{city.name}</Text>
+          </Group> :
+          <Text fw={700} size="md" c="#0d2e4e">Город не указан</Text>
+          }
         </Group>
 
         {/* Формат работы */}
         <Badge color="#20B0B4" w="fit-content">{employment}</Badge>
 
         {/* Зарплата */}
-        <Text size="xl" fw={700} c='#20B0B4'>{salary}</Text>
+        {salary ?
+          <Text size="xl" fw={700} c='#20B0B4'>{salary}</Text> :
+          <Text size="xl" fw={700} c='#0d2e4e'>Зарплата не указана</Text>
+        }
 
         {/* Навыки */}
         <Group wrap="wrap" gap="xs">
-          {skills.map((skill) => (
-            <Badge 
-              key={skill} 
-              color="#20B0B4"
-              variant="outline"
-              size="md"
-              style={{ width: 'auto' }}
-            >
-              {skill}
-            </Badge>
-          ))}
+          {skills && skills.length > 0 ? (
+            skills.map((skill) => (
+              <Badge 
+                key={skill} 
+                color="#20B0B4"
+                variant="outline"
+                size="md"
+                style={{ width: 'auto' }}
+              >
+                {skill}
+              </Badge>
+            ))
+          ) : (
+            <Text fw={700} size="md" c="#0d2e4e">Необходимые навыки не указаны</Text>
+          )}
         </Group>
 
         <Button color="#20B0B4" radius='md' fullWidth>Откликнуться</Button>
