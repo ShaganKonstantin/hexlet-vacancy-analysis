@@ -21,4 +21,5 @@ export interface VacancyCardProps {
     name: string;
   };
   skills: string[];
+  description: string;
 }

@@ -25,6 +25,7 @@ def index(request):
                 'name': v.city.name if v.city else '',
             } if v.city else None,
             'skills': v.skills.split(',') if v.skills else [],
+            'description': v.description or '',
         }
         vacancies.append(vacancy_data)
 
