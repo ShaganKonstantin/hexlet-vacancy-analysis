@@ -1,0 +1,1 @@
+export { FullVacancy } from './ui/FullVacancy'
