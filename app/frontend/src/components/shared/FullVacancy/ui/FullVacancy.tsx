@@ -1,6 +1,7 @@
 import React from "react";
 import type { VacancyCardProps } from "../../../../types";
 import { Card, Group, Text, Badge, List, ThemeIcon } from '@mantine/core';
+import { useMediaQuery } from "@mantine/hooks";
 import { FileText, SquareCheckBig, CircleCheck, Briefcase, CircleSmall, Tag } from "lucide-react";
 
 interface FullVacancyProps {
@@ -25,6 +26,8 @@ const responsibilities = [
 export const FullVacancy: React.FC<FullVacancyProps> = ({ props }) => {
 
   const { skills, description } = props;
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
         <Card padding="none">
           {/* Описание вакансии */}
@@ -92,7 +95,7 @@ export const FullVacancy: React.FC<FullVacancyProps> = ({ props }) => {
                   <Badge
                   color="#20B0B4"
                   variant="outline"
-                  size="xl"
+                  size={isMobile ? 'md' : 'lg'}
                 >
                   {skill}
                 </Badge>

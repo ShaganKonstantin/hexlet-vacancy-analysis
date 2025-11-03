@@ -2,7 +2,7 @@ import React from "react";
 import type { VacancyCardProps } from "../../../../types";
 import { Card, Group, Text, Badge, Button, Stack, Box } from '@mantine/core';
 import { Building2, MapPin } from "lucide-react";
-import { Link } from "@inertiajs/react";
+// import { Link } from "@inertiajs/react";
 
 interface VacancyCardPropsWrapper {
   props: VacancyCardProps;
@@ -12,7 +12,7 @@ export const VacancyCard: React.FC<VacancyCardPropsWrapper> = ({ props }) => {
 
   const { id, title, url, salary, employment, company, city, skills } = props;
   return (
-    <Link href={url || `/vacancies/${id}`} style={{ textDecoration: 'none' }}>
+    // <Link href={url || `/vacancies/${id}`} style={{ textDecoration: 'none' }}>
      <Card shadow="sm" padding="lg" radius="md" withBorder mx="auto" style={{ width: '100%'}} mb={20}>
       {/* Десктопная версия */}
       <Group justify="space-between" wrap="nowrap" visibleFrom="sm">
@@ -134,6 +134,6 @@ export const VacancyCard: React.FC<VacancyCardPropsWrapper> = ({ props }) => {
         <Button color="#20B0B4" radius='md' fullWidth>Откликнуться</Button>
       </Stack>
     </Card>
-    </Link>
+    // </Link>
   );
 };
