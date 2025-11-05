@@ -23,3 +23,24 @@ export interface VacancyCardProps {
   skills: string[];
   description: string;
 }
+
+interface Region {
+  id: number;
+  name: string;
+}
+
+export interface RegionPageProps {
+  region: Region;
+  vacancies: VacancyCardProps[];
+  regionCities: Region[];
+  filters: {
+    experience: string;
+    region: string;
+    search: string;
+  };
+  pagination: {
+    current_page: number;
+    last_page: number;
+    links: { url: string | null; label: string; active: boolean }[];
+  }
+}
