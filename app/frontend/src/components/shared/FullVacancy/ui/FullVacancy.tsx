@@ -93,6 +93,7 @@ export const FullVacancy: React.FC<FullVacancyProps> = ({ props }) => {
               {skills && skills.length > 0 ? (
                 skills.map((skill) => (
                   <Badge
+                  key={skill}
                   color="#20B0B4"
                   variant="outline"
                   size={isMobile ? 'md' : 'lg'}
