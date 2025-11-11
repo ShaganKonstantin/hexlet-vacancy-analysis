@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Group, Text, Select, TextInput, Stack, Card, Container, CloseButton } from '@mantine/core';
+import { Group, Text, Select, TextInput, Stack, Card, Container, CloseButton, Pagination } from '@mantine/core';
 import { useMediaQuery } from "@mantine/hooks";
 import { useDebouncedValue } from '@mantine/hooks';
 import { VacancyCard } from "../../shared/VacancyCard";
@@ -17,17 +17,21 @@ interface VacancyFiltersProps {
 }
 
 export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => {
-  // Единое состояние фильтров
+  // Общее состояние фильтров
   const [filters, setFilters] = useState<Filters>({
     experience: '',
     city: '',
     keywords: ''
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+
   // Дебаунс для поискового запроса (задержка 300мс)
   const [debouncedKeywords] = useDebouncedValue(filters.keywords, 300);
 
-  // Мемоизированные опции
+  // Мемоизированные опции по опыту
   const experienceOptions = useMemo(() => [
     { value: 'no experience', label: 'Без опыта' },
     { value: '1-3 years', label: '1-3 года' },
@@ -82,13 +86,13 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
       }
 
       // Фильтр по городу
-      if (filters.city && vacancy.city) {
-        if (filters.city !== vacancy.city.name) {
+      if (filters.city) {
+        if (!vacancy.city || vacancy.city.name !== filters.city) {
           return false;
         }
       }
 
-      // Фильтр по ключевым словам (используем дебаунс значение)
+      // Фильтр по ключевым словам с дебаунс вводом
       if (filters.keywords.trim()) {
         const keywords = filters.keywords.toLowerCase().split(' ').filter(k => k.length > 0);
         const searchText = `${vacancy.title} ${vacancy.description} ${vacancy.skills.join(' ')} ${vacancy.company?.name || ''}`.toLowerCase();
@@ -117,6 +121,28 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
     return filterVacancies(vacancies, effectiveFilters);
   }, [vacancies, effectiveFilters, filterVacancies]);
 
+  // Сколько вакансий берем из массива
+  const paginatedVacancies = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage; // Индекс, НАЧИНАЯ с которого берутся итемы
+    const lastIndex = startIndex + itemsPerPage; // Индекс ДО КОТОРОГО берутся итемы, не включая его самого
+    return filteredVacancies.slice(startIndex, lastIndex);
+  }, [filteredVacancies, currentPage])
+
+  const totalPagesQuantity = useMemo(() => {
+    return Math.ceil(filteredVacancies.length / itemsPerPage)
+  }, [filteredVacancies.length])
+
+
+  // Сбрасывает пагинацию если меняются фильтры
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [effectiveFilters])
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
+
   // Обработчики изменений фильтров
   const handleExperienceChange = useCallback((value: string | null) => {
     setFilters(prev => ({ ...prev, experience: value || '' }));
@@ -143,7 +169,7 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
       {/* Фильтры */}
       <Group mb='xl' gap='md' wrap="wrap" justify="space-between">
         
-        {/* Группа селектов */}
+        {/* Селекты по опыту и региону */}
         <Group gap='md' wrap="wrap" style={{ flex: 1 }}>
           <Select
             placeholder="Опыт"
@@ -151,6 +177,7 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
             onChange={handleExperienceChange}
             data={experienceOptions}
             clearable
+            checkIconPosition="right"
             style={{ minWidth: isMobile ? '100%' : '200px' }}
           />
 
@@ -161,11 +188,12 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
             data={cityOptions}
             clearable
             searchable
+            checkIconPosition="right"
             style={{ minWidth: isMobile ? '100%' : '200px' }}
           />
         </Group>
 
-        {/* Поле поиска */}
+        {/* Поиск по словам */}
         <TextInput
           placeholder="Поиск по ключевым словам..."
           value={filters.keywords}
@@ -184,10 +212,10 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
         />
       </Group>
 
-      {/* Результаты */}
+      {/* Карточки с ваканисей */}
       <Stack gap="md">
-        {filteredVacancies.length > 0 ? (
-          filteredVacancies.map(vacancy => (
+        {paginatedVacancies.length > 0 ? (
+          paginatedVacancies.map(vacancy => (
             <VacancyCard key={vacancy.id} props={vacancy} />
           ))
         ) : (
@@ -201,6 +229,19 @@ export const VacancyFilters: React.FC<VacancyFiltersProps> = ({ vacancies }) => 
           </Card>
         )}
       </Stack>
+
+      {/* Кнопки со номерами страниц */}
+      {totalPagesQuantity > 1 && (
+        <Pagination 
+          total={totalPagesQuantity}
+          boundaries={2}
+          siblings={2}
+          value={currentPage}
+          onChange={handlePageChange}
+          color="#20B0B4"
+        />
+      )}
     </Container>
   );
 };
+
